@@ -23,6 +23,8 @@ import pandas as pd
 from psychopy import gui, visual, core, data, event, logging
 from psychopy.constants import STARTED, STOPPED
 
+from utils import biopac_signature
+
 # Constants
 OPERATOR_DICT = {'+': 'add',
                  '-': 'subtract',
@@ -338,9 +340,10 @@ the value that follows:
             shuffle_idx = np.random.permutation(config_df.index.values)
             config_df[c] = config_df.loc[shuffle_idx, c].reset_index(drop=True)
 
-        # Reset BioPac
+        # Reset BioPac, just to be safe
         if exp_info['BioPac'] == 'Yes':
             ser.write('RR')
+            biopac_signature(ser, ':A{}:'.format(run_label))
 
         # Scanner runtime
         # ---------------
